@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violet's World</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(to bottom, #ffe6f0, #f5e1ff);
+            color: #5a2a83;
+            transition: background 0.5s, color 0.5s;
+        }
+        .dark-mode {
+            background: #341b3b;
+            color: #fce4fc;
+        }
+        header {
+            background-color: #f8dfff;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.5s;
+        }
+        .dark-mode header {
+            background-color: #471a4b;
+        }
+        nav {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .home-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+        }
+        .sub-heading {
+            font-size: 1.8rem;
+            margin-top: 0.5rem;
+        }
+        .sub-sub-heading {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        .star {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+        .hamburger {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            cursor: pointer;
+        }
+        .hamburger div {
+            width: 30px;
+            height: 4px;
+            background-color: #5a2a83;
+            margin: 5px 0;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 1rem;
+            left: 4rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #f8dfff;
+            box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+            padding: 1rem;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        .dark-mode .sidebar {
+            background-color: #471a4b;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar a {
+            display: block;
+            margin: 1rem 0;
+            color: #8e44ad;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .close-sidebar {
+            display: flex;
+            align-items: center;
+            margin-top: 2rem;
+            cursor: pointer;
+            color: #5a2a83;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45%;
+            height: 70vh; /* Fixed height to enable scrolling */
+            background: #fff0f9;
+            border: 2px dashed #aa6bb5;
+            padding: 1.5rem;
+            z-index: 2000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            overflow-y: auto; /* 🔥 Makes it scroll when content overflows */
+            overflow-x: hidden;
+            border-radius: 10px;
+        }
+        .dark-mode .overlay {
+            background: #50244d;
+            border-color: #fce4fc;
+            color: #fce4fc;
+        }
+        .overlay h2 {
+            margin-top: 0;
+        }
+        .overlay .sub-heading {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .overlay .intro {
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        .overlay ul {
+            margin-left: 1rem;
+        }
+        .overlay ul li strong {
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        .overlay ul ul {
+            list-style-type: circle;
+            margin-left: 1.5rem;
+        }
+        button.close-btn {
+            margin-top: 1rem;
+            background-color: #8e44ad;
+            color: #fce4fc;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        button.close-btn:hover {
+            background-color: #5a2a83;
+        }
+    </style>
+</head>
+<body>
+    <div class="hamburger" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="mode-toggle" onclick="toggleMode()">🌙</div>
+    <div class="sidebar" id="sidebar">
+        <a href="#" onclick="openDialog('about')">About Me</a>
+        <a href="#" onclick="openDialog('crimes')">Crimes</a>
+        <a href="#" onclick="openDialog('surveillance')">Surveillance Logs</a>
+        <a href="#" onclick="openDialog('summon')">Summon Me</a>
+        <a href="#" onclick="openDialog('specialMoves')">Special Moves</a>
+        <a href="#" onclick="openDialog('testimonials')">Testimonials</a>
+        <a href="#" onclick="openDialog('parting')">Parting Words</a>
+        <div class="close-sidebar" onclick="toggleSidebar()">⬅ Back</div>
+    </div>
+    <header>
+        <h1 class="home-heading"><span class="star">🌟</span>HI, I am Violet</h1>
+        <div class="sub-heading">lover, learner, lunatic on low battery</div> <br>
+        <div class="sub-sub-heading">Part time sweetheart, full time student,<br>
+        and certified chaos technician <br> when mood hits. <br>
+        Devours books, hearts, and sometimes... laws. <br>
+        Just for fun.</div>
+    </header>
+
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.mode-toggle');
+            icon.textContent = document.body.classList.contains('dark-mode') ? '💡' : '🌙';
+        }
+
+        function openDialog(section) {
+            const overlay = document.getElementById('overlay');
+            toggleSidebar();
+
+            let content = '';
+            if (section === 'about') {
+                content = `
+                    <h2>About Me</h2>
+                    <div class="sub-heading">If you are curious about why I am a threat to society and sometimes myself read this; before I change my identity again.</div>
+                    <p style="font-size: 1.22rem;">Once a quiet girl with a notebook. Now a semi-mythical entity known for learning fast, loving harder, and occasionally doing mildly illegal things just to feel alive.</p>
+                    <p style="font-size: 1.22rem;">I’m a first-year AIML student by day, divine chaos gremlin by night. I teach machines how to think, people how to feel, and myself how to chill (work in progress). Behind the soft smile lies a storm of ambition, chocolate, and slightly villainous tendencies. I’ve been called "sweet" and "terrifying" in the same sentence—and honestly, I agree.</p>
+                    <p style="font-size: 1.22rem;">I don't sleep until my code runs and my eyeliner’s sharp. I’m building an empire out of algorithms, affection, and occasional emotional breakdowns, all while trying to look cute doing it.</p>
+                    <p style="font-size: 1.22rem;">I love bribes. I work faster if you offer snacks, shiny things, or untraceable compliments. Monetary compensation is also accepted—I don’t work for free unless it's for love, vengeance, or fun.</p>
+                    <p style="font-size: 1.22rem;">If you’re looking for someone who’ll study neural networks, write you poetry, and overthrow the patriarchy before dinner—hi.</p>
+                    <p style="font-size: 1.22rem;">Feeling brave? Check out the Summon Me section to send a message, a proposal, or a meme. I respond best to flattery and well-structured emails.</p>
+                    <button class="close-btn" onclick="closeOverlay()">Close</button>
+                `;
+            } else if (section === 'crimes') {
+                content = `
+                    <h2>Crimes (aka projects)</h2>
+                    <div class="sub-heading">Things I have created that didn't require bail money. Compilation of some things that I designed, coded, broke and love.</div>
+                    <p style="font-size: 1.22rem;"><div class="intro">Not all heroes wear capes. Some wear under-eye concealer, sarcasm and write suspicious amounts of code at 3 AM. <br>Below lies a curated archive of my most glorious offences—projects, experiments, and digital mischiefs born out of curiosity, ambition, and occasional boredom. Each act is stamped with love, chocolate, and a questionable number of browser tabs.</div><p>
+                    <ul>
+                        <li style="font-size: 1.3rem;"><strong>CODENAME: Porcelain Fall</strong>
+                            <ul style="font-size: 1.1rem;">
+                                <li>Date of Offense: Unknown. Time was a blur.</li>
+                                <li>Crime Scene: Kitchen Floor</li>
+                                <li>Charges: Accidental destruction of my favorite bowl a.k.a. the Chosen Vessel of Cereal and Comfort. <br> Immediate cover-up attempt with slippers and denial.<br> Grief spiral that involved cradling ceramic shards like ancient relics.</li>
+                                <li>Motive: Was vibing. Moved too fast. Gravity did the rest.</li>
+                                <li>Evidence: Bowl fragments. Emotional damage. One stunned silence.</li>
+                                <li>Threat Level: Devastating, but mostly to my heart.</li>
+                                <li>Snack Fuel: None. The bowl died before it could serve.</li>
+                            </ul>
+                        </li> <br>
+                        <li style="font-size: 1.3rem;"><strong>CODENAME: Swing Wars</strong>
+                            <ul style="font-size: 1.1rem;">
+                                <li>Date of Offence: Classified</li>
+                                <li>Crime Scene: Local Park</li>
+                                <li>Charges: Attempted bribery of a minor (with candy, not cryptocurrency). <br>Public candy consumption used as psychological warfare.<br> Victory by emotional manipulation and petty dramatics.</li>
+                                <li>Motive: Just wanted to swing and touch the sky like the angel–witch hybrid I am.</li>
+                                <li>Victim Profile: Stubborn. Ill-mannered. Clearly a chaos spawn with zero gratitude.</li>
+                                <li>Evidence: Empty candy wrappers. Faint scent of drama. One very confused elder sister.</li>
+                                <li>Threat Level: Chaotic Good (with a dash of petty evil)</li>
+                                <li>Snack Fuel: Two candies consumed as revenge, not sustenance.</li>
+                                <li>Outcome: Swing was reclaimed. Pride was intact. No regrets. Would do it again.</li>
+                                <li>Note to Park Security: Mind your business.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button class="close-btn" onclick="closeOverlay()">Close</button>
+                `;
+            }  else if (section === 'surveillance') {
+    content = `
+        <h2>Surveillance Blogs</h2>
+        <div class="sub-heading">This is where I track my thoughts like they’re suspects in a crime. Some are guilty, some are genius, most are both.</div>
+        <ul>
+            <li><strong>Philosophical Rants</strong>
+                <p style="font-size: 1rem;">What if I was never meant to be “normal”? What if my path is divine, dramatic, and involves 17 tabs open at once—only one of them useful?</p>
+                <p style="font-size: 1rem;">I’m not lost. I’m just buffering between dimensions.</p>
+            </li>
+            <li><strong>Chaos Devlog</strong>
+                <p style="font-size: 1rem;">Tried debugging for 3 hours. Turned out the bug was me—I misspelled ‘return’ as ‘reutrn.’</p>
+                <p style="font-size: 1rem;">My IDE and I are currently not on speaking terms. It keeps underlining my self-worth in red.</p>
+            </li>
+            <li><strong>Mood Report</strong>
+                <p style="font-size: 1rem;"><strong>Status:</strong> Silently judging people's font choices and then crying over Pixar movies.</p>
+                <p style="font-size: 1rem;"><strong>Energy:</strong> Bribeable. Vulnerable. Wearing a cute hoodie like armor and carrying emotional snacks. Might solve your bug or hex your laptop—depends on your tone.</p>
+                <p style="font-size: 1rem;"><strong>Vibe:</strong> Eyeliner sharp enough to kill, heart soft enough to pray for its victim. Writes code like a villain under deadline, cries over dropped ice cream like a saint. The duality is not accidental—it’s the brand.</p>
+            </li>
+            <li><strong>Random Confession</strong>
+                <p style="font-size: 1rem;">Sometimes I walk into college like an ethereal mafia queen running a mafia ring, like I own five underground casinos and a blackmail folder on the dean. Also, I have a suspicious talent for aesthetic arson. Just vibes and gasoline.</p>
+            </li>
+        </ul>
+        <button class="close-btn" onclick="closeOverlay()">Close</button>
+    `;
+}   else if (section === 'specialMoves') {
+    content = `
+        <h2>Special Moves</h2>
+        <div class="sub-heading">Not just skills. These are weapons of mass distraction.<br>Use responsibly—or dramatically. Preferably both.</div>
+        <ul>
+            <li style="font-size: 1.1rem;"><strong>🧊 Cube Conjurer</strong> (Rank: Master)
+                <ul style="font-size: 1rem;">
+                    <li>Can solve cubes in so many dimensions it makes reality glitch a little.</li>
+                    <li>Once made a Rubik’s cube cry. Still polite about it.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>📦 Speedcubing Gremlin</strong> (Rank: In Training)
+                <ul>
+                    <li>Trying to go sub-30 seconds. Fails, but looks cool failing.</li>
+                    <li>Keeps solving like time’s an illusion (because it is).</li>
+                </ul>
+            </li> <br>
+            <li style="font-size: 1.1rem;"><strong>✒️ Calligraphy Wielder</strong> (Rank: Master)
+                <ul>
+                    <li>Writes letters that flirt. Sharpens pens like swords.</li>
+                    <li>Fonts fear her.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>🕸️ Web Alchemist</strong> (Rank: In Training)
+                <ul>
+                    <li>Can spin code into silk, just don’t look at the CSS too closely yet.</li>
+                    <li>If you're on this site right now, you already know.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>🔖 Literary Glutton</strong> (Rank: Can Defeat Mortals With This)
+                <ul>
+                    <li>Reads 400 pages a day like it’s a casual snack.</li>
+                    <li>Devours books and absorbs their power.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>➗ Math Mage</strong> (Rank: On The Way to Conquer)
+                <ul>
+                    <li>Whispers sweet nothings to integrals.</li>
+                    <li>Does algebra while plotting world domination.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>🎼 Guitar Summoner</strong> (Rank: In Training)
+                <ul>
+                    <li>Still learning, but makes it look like a dramatic anime training arc.</li>
+                    <li>Plucks strings, breaks hearts, drops picks.</li>
+                </ul>
+            </li><br>
+            <li style="font-size: 1.1rem;"><strong>🥤 Cup Song Casualty</strong> (Rank: Can Defeat Mortals With This)
+                <ul>
+                    <li>Can play the cup song like breathing. Crushes confidence at parties without trying.</li>
+                </ul>
+            </li>
+        </ul>
+        <p style="font-size: 1.1rem;">Need my skills or want to learn how I do my magic?<br>
+        Check out the Summon Me section.<br>
+        Bribes accepted. Compliments increase response speed.</p>
+        <button class="close-btn" onclick="closeOverlay()">Close</button>
+    `;
+}    else if (section === 'testimonials') {
+    content = `
+        <h2>What they say</h2>
+        <div class="sub-heading">(Collected from survivors, admirers, and one deeply confused AI.)</div>
+        <ul style="list-style-type: disc; padding-left: 1.8rem;">
+            <strong>"She taught a neural network to feel emotions and then emotionally manipulated it. I think I saw it cry." </strong><br>
+                <div style="text-align: left; font-style: italic;">— Former AI, now in therapy</div><br>
+            
+            <strong>"Commissioned a website. Got a digital shrine, emotional damage, and a bonus cursed button. 10/10 would click again."</strong><br>
+                <div style="text-align: left; font-style: italic;">— Totally real client and not her alter ego</div><br>
+            
+            <strong>"She borrowed my book and returned it annotated, emotionally stabbed, and glowing."<br></strong>
+                <div style="text-align: left; font-style: italic;">— Victim of her reading rampage</div><br>
+          
+            <strong>"Brilliant. Cute. Terrifying. Asked me if chaos theory can be applied to cafeteria fights."<br></strong>
+                <div style="text-align: left; font-style: italic;">— Anonymous professor (sweating)</div><br>
+
+            <strong>"Tried to summon her using glitter, caffeine, and internet vibes. It worked. She now lives in my Pinterest board."<br></strong>
+                <div style="text-align: left; font-style: italic;">— Internet stranger, probably cursed now</div><br>
+
+            <strong>"Her code works. Don’t ask how. It just… does. Like some kind of sorcery."<br></strong>
+                <div style="text-align: left; font-style: italic;">— GitHub repo, slightly haunted</div><br>
+           
+            <strong>"Looks sweet. Is secretly a Bond villain. I love her."<br></strong>
+                <div style="text-align: left; font-style: italic;">— Her fictional boyfriend, proudly under her spell</div> <br>
+           
+            <strong>"One day, she will read the universe like a PDF and annotate it with chaos."<br></strong>
+                <div style="text-align: left; font-style: italic;">— Probably an ancient prophecy</div>
+        </ul>
+        <button class="close-btn" onclick="closeOverlay()">Close</button>
+    `;
+}      else if (section === 'parting') {
+    content = `
+        <h2>Parting Words</h2>
+        <div class="sub-heading">Congratulations, you beautiful disaster. 🎭</div>
+        <p style="font-size: 1.1rem;">You’ve seen the art, read the crimes, scrolled through my villain arc—and now, congratulations.</p>
+        <p style="font-size: 1.1rem;">You're cursed. Not like bad luck cursed, but more like you’ll randomly think of this site at 3 AM and giggle cursed.</p>
+        <p style="font-size: 1.1rem;">You’re now emotionally bound to this domain. You'll be back. Resistance is adorable, but futile.</p>
+        <p style="font-size: 1.1rem;">Go on then—live your little life. Have a nice day, night, spiral, or existential crisis. Whatever suits your mood.</p>
+        <strong><p style="font-size: 1.1rem;">But beware… I’m watching.</strong><br>(Just kidding. Or am I?) 👀</p>
+        <button class="close-btn" onclick="closeOverlay()">Close</button>
+    `;
+}     else if (section === 'summon')  {
+content = `
+        <h2>Summon Me</h2>
+        <div class="sub-heading">You’ve made it this far. Curious? Fascinated? Mildly afraid? <br> Perfect.Here’s where you get to peek behind the curtain and maybe, just maybe, summon me into your world.</div> <br>
+        <a href="https://www.instagram.com/bewitching_beginnings?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+           <img
+        src="https://img.icons8.com/?size=100&id=43625&format=png&color=000000"
+        alt ="Instagram Icon"
+        style="display:block; margin: 0 auto;">
+        </a>  
+        <p style="font-size: 1.1rem; font-style: italics; text-align: center;"> (A delicate mess of mischief and beauty. Expect: dreamy sceneries, dramatic books, tiny acts of chaos, and art that may or may not be cursed.)</p>
+        <p style="font-size:1.1rem; text-align: center;"><strong> ⚠️ Click at your own risk. You might fall in love or spiral into a hyperfixation.<br>
+Either way—I win.</p></strong>
+        <button class="close-btn" onclick="closeOverlay()">Close</button>
+    `;
+}    
+            overlay.innerHTML = content;
+            overlay.style.display = 'block';
+        }
+
+        function closeOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
